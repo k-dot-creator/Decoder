@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JRDECODER</title>
+    
+    <!-- Bootstrap CSS from Replit's CDN -->
+    <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container py-4">
+        <header class="text-center mb-5">
+            <h1 class="display-4 jrdecoder-title"><i class="fas fa-unlock me-2"></i>JRDECODER</h1>
+            <p class="lead">Decode various encoding formats back to their original form</p>
+            <div class="rainbow-divider my-3"></div>
+        </header>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card mb-4 shadow">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="fas fa-code me-2"></i>Input Encoded Data</h5>
+                        <div>
+                            <button id="clearBtn" class="btn btn-outline-secondary btn-sm">
+                                <i class="fas fa-eraser me-1"></i>Clear
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form id="decodeForm">
+                            <div class="mb-3">
+                                <textarea 
+                                    id="encodedInput" 
+                                    class="form-control" 
+                                    rows="6" 
+                                    placeholder="Paste your encoded text here..."
+                                    required
+                                ></textarea>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="decodeMethod" class="form-label">Decoding Method:</label>
+                                    <select id="decodeMethod" class="form-select">
+                                        <option value="base64" selected>Base64</option>
+                                        <option value="hex">Hexadecimal</option>
+                                        <option value="binary">Binary</option>
+                                        <option value="url">URL Encoding</option>
+                                        <option value="html">HTML Entities</option>
+                                        <option value="rot13">ROT13</option>
+                                        <option value="caesar">Caesar Cipher</option>
+                                        <option value="morse">Morse Code</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-md-6 caesar-key-container d-none">
+                                    <label for="caesarKey" class="form-label">Caesar Cipher Key (1-25):</label>
+                                    <input type="number" id="caesarKey" class="form-control" min="1" max="25" value="3">
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="encodingType" class="form-label">Character Encoding:</label>
+                                    <select id="encodingType" class="form-select">
+                                        <option value="utf-8" selected>UTF-8 (Default)</option>
+                                        <option value="ascii">ASCII</option>
+                                        <option value="latin-1">Latin-1 (ISO-8859-1)</option>
+                                        <option value="utf-16">UTF-16</option>
+                                        <option value="utf-32">UTF-32</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid">
+                                <button type="submit" id="decodeBtn" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-unlock me-1"></i>Decode
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="card shadow">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="fas fa-magic me-2"></i>Decoded Output</h5>
+                        <div>
+                            <button id="copyBtn" class="btn btn-outline-secondary btn-sm me-2" disabled>
+                                <i class="fas fa-copy me-1"></i>Copy
+                            </button>
+                            <button id="downloadBtn" class="btn btn-outline-secondary btn-sm" disabled>
+                                <i class="fas fa-download me-1"></i>Download
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="alertArea"></div>
+                        
+                        <div id="textOutput" class="mb-3 d-none">
+                            <label class="form-label">Text Result:</label>
+                            <textarea id="decodedText" class="form-control" rows="6" readonly></textarea>
+                        </div>
+                        
+                        <div id="imageOutput" class="text-center mb-3 d-none">
+                            <label class="form-label">Image Result:</label>
+                            <div class="image-container">
+                                <img id="decodedImage" class="img-fluid border rounded" alt="Decoded image">
+                            </div>
+                        </div>
+                        
+                        <div id="fileOutput" class="mb-3 d-none">
+                            <label class="form-label">File Result:</label>
+                            <div class="border rounded p-3 bg-secondary-subtle">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-file fa-2x me-3"></i>
+                                    <div>
+                                        <p id="fileInfo" class="mb-0"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer class="mt-5 text-center">
+            <div class="rainbow-divider my-3 mb-4" style="width: 50%;"></div>
+            <p>
+                <small class="text-muted">
+                    JRDECODER: A secure multi-format decoder tool. Supporting Base64, Hex, URL, HTML, ROT13, Caesar, Morse code and more.
+                </small>
+            </p>
+        </footer>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Decoder Script -->
+    <script src="script.js"></script>
+</body>
+</html>
